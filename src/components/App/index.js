@@ -8,6 +8,7 @@ import {
 import { open } from '../../utils/indexdb';
 import Home from '../Home';
 import About from '../About';
+import Settings from '../Settings';
 import Statistics from '../Statistics';
 import Header from '../Header';
 
@@ -38,25 +39,30 @@ class App extends React.Component {
         };
 
         return (
-            <Router>
-                <Wrapper>
-                    <GlobalStyle/>
-                    
-                        <Header/>
-    
-                        <Switch>
-                            <Route path="/about">
-                                <About />
-                            </Route>
-                            <Route path="/statistics">
-                                <Statistics />
-                            </Route>
-                            <Route path="/">
-                                <Home />
-                            </Route>
-                            </Switch>
-                </Wrapper>
-            </Router>
+                <Router>
+                    <Wrapper>
+                        <GlobalStyle/>
+                        
+                            <Header/>
+        
+                            <Switch>
+                                <Route path="/about">
+                                    <About />
+                                </Route>
+                                <Route path="/statistics">
+                                    <Statistics />
+                                </Route>
+
+                                <Route path="/settings">
+                                    <Settings />
+                                </Route>
+
+                                <Route path="/">
+                                    <Home />
+                                </Route>
+                                </Switch>
+                    </Wrapper>
+                </Router>
         )
     }
     

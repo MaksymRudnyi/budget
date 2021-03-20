@@ -27,3 +27,11 @@ export const Comment = styled.div`
 `;
 Comment.displayName = 'Comment'
 
+export const Icon = styled.span`
+    img {
+        max-width: 20px;
+        margin-right: 10px;
+    }
+`;
+Icon.displayName = 'Icon';
+
