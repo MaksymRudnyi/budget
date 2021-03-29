@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 
 import { STATUSES } from './constants';
-import { getItems, addItem } from './utils/indexdb'
+import { getItems, addItem, deleteItem } from './utils/indexdb'
 
 export const useBooleanToggle = (initialStatus = false) => {
     const [status, setStatus] = useState(initialStatus);
@@ -66,7 +66,9 @@ export const useData = () => {
         setState((state) => ({
             ...state,
             transactions: state.transactions.filter((item) => item.id !== id)
-        }))
+        }));
+
+        deleteItem(id);
     }, [setState]);
 
     const onStarClick = useCallback((id) => {
