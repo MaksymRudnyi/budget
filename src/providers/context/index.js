@@ -12,6 +12,21 @@ const reducer = (state, action) => {
             }
         };
 
+        case 'setTheme': {
+            return {
+                ...state,
+                themeName: action.themeName
+            }
+        }
+
+
+        case 'setLocale': {
+            return {
+                ...state,
+                locale: action.locale
+            }
+        }
+
         case 'reset': {
             return defaultContext
         };

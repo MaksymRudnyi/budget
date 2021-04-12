@@ -1,71 +1,18 @@
-import React from 'react';
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route
-  } from "react-router-dom";
+import React, {useContext} from 'react';
+import { ThemeProvider } from 'styled-components';
+import App from './app';
+import {AppContext} from '../../providers/context';
+import {getTheme} from '../../providers/themes/getTheme';
+import { IntlAppProvider } from '../../providers/i18n';
 
-import { open } from '../../utils/indexdb';
-import Home from '../Home';
-import About from '../About';
-import Settings from '../Settings';
-import Statistics from '../Statistics';
-import Header from '../Header';
+export default () => {
+    const {state, dispatch } = useContext(AppContext);
 
-import { Wrapper, GlobalStyle } from './styles'
-
-class App extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            loading: true
-        }
-    }
-
-    componentDidMount() {
-        open().then(() => {
-            this.setState({
-                loading: false
-            })
-        }).catch(() => {
-            console.error('Помилка')
-        });
-    }
-
-    render() {
-        if (this.state.loading) {
-            return <div>Loading...</div>
-        };
-
-        return (
-                <Router>
-                    <Wrapper>
-                        <GlobalStyle/>
-                        
-                            <Header/>
-        
-                            <Switch>
-                                <Route path="/about">
-                                    <About />
-                                </Route>
-                                <Route path="/statistics">
-                                    <Statistics />
-                                </Route>
-
-                                <Route path="/settings">
-                                    <Settings />
-                                </Route>
-
-                                <Route path="/">
-                                    <Home />
-                                </Route>
-                                </Switch>
-                    </Wrapper>
-                </Router>
-        )
-    }
-    
+    return (
+        <ThemeProvider theme={getTheme(state.themeName)}>
+            <IntlAppProvider>
+                <App/>
+            </IntlAppProvider>
+        </ThemeProvider>
+    )
 }
-
-  export default App;
