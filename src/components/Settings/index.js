@@ -5,6 +5,8 @@ import { LOCALES } from '../../providers/i18n';
 import { useBooleanToggle} from '../../hooks';
 import { saveToStorage } from '../../utils/sessionStorage'
 
+import {Modal} from '../Modal';
+import Counter from '../Counter';
 
 const Test = memo(({data}) => {
     console.log('rendering');
@@ -39,8 +41,23 @@ const Setting = () => {
 
     const data = useMemo(() => [2], []);
 
+    const [openModal, setOpenModal] = useState(false);
+
     return (
         <>
+            <button onClick={() => setOpenModal(true)}>Open</button>
+            <Modal open={openModal} onClose={() => setOpenModal(false)}>
+                <Counter/>
+                <button onClick={() => setOpenModal(false)}>close</button>
+            </Modal>
+
+            {/* <Portal>
+                <div>
+                    <p>sfsf</p>
+                    <Counter/>
+                </div>  
+            </Portal> */}
+
             <h1>Налаштування</h1>
 
             <Test data={data}/>
