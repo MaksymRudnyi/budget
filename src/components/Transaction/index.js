@@ -1,12 +1,12 @@
 import PropTypes from 'prop-types';
-import { useContext, useCallback } from 'react';
+import { useContext, useCallback, memo } from 'react';
 
 import { AppContext } from '../../providers/context';
 import { Wrapper, TransactionDate, Value, Comment, Icon } from './styles';
 import Star from '../../assets/img/star.svg';
 import StarFilled from '../../assets/img/star_filed.svg';
 
-const Transaction = ({ transaction: {id, value, date, comment, isStarred}, onDelete, onStarClick }) => {
+const Transaction = memo(({ transaction: {id, value, date, comment, isStarred}, onDelete, onStarClick }) => {
     const {state} = useContext(AppContext);
 
     const deleteItem = useCallback(() => onDelete(id), [id]);
@@ -23,7 +23,7 @@ const Transaction = ({ transaction: {id, value, date, comment, isStarred}, onDel
             <button onClick={deleteItem}>Delete</button>
         </Wrapper>
     );
-}
+})
 
 Transaction.propTypes = {
     transaction: PropTypes.shape({
