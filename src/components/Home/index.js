@@ -13,7 +13,7 @@ import { useData } from '../../hooks';
 const Home = () => {
     const [balance, setBalance] = useState(0);
 
-    const { transactions, status, pushTransaction, onDelete, onStarClick } = useData();
+    const { transactions, hasNextPage, status, pushTransaction, onDelete, onStarClick, loadMoreRows } = useData();
 
     const onChange = (transaction) => {
         pushTransaction(transaction);
@@ -27,15 +27,12 @@ const Home = () => {
                 <ChangeBalance onChange={onChange}/>
                 <hr/>
 
-                { status === STATUSES.PENDING ? (
-                    <div>Loading...</div>
-                ): null}
-
-                { status === STATUSES.SUCCESS ? (
-                    <Transactions transactions={transactions} 
-                        onDelete={onDelete}
-                        onStarClick={onStarClick}/>
-                ): null}        
+                <Transactions data={transactions} 
+                    isNextPageLoading={status === STATUSES.PENDING}
+                    hasNextPage={hasNextPage}
+                    loadMoreRows={loadMoreRows}
+                    onDelete={onDelete}
+                    onStarClick={onStarClick}/>
             </Wrapper>
         </ErrorBoundary>
     )

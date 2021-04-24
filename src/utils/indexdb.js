@@ -91,6 +91,39 @@ function getItems() {
     })
 };
 
+function getData(start,total) {
+
+	return new Promise(function(resolve, reject) {
+    var db = html5rocks.indexedDB.db;
+		var t = db.transaction([DB_NAME],'readonly');
+		var store = t.objectStore(DB_NAME);
+		var transactions = [];
+    var hasSkipped = false;
+    
+		store.openCursor(null, 'prev').onsuccess = function(e) {
+
+			var cursor = e.target.result;
+			if(!hasSkipped && start > 0) {
+				hasSkipped = true;
+				cursor.advance(start);
+				return;
+			}
+			if(cursor) {
+				transactions.push(cursor.value);
+				if(transactions.length < total) {
+					cursor.continue();
+				} else {
+					resolve(transactions);
+				}
+			} else {
+				resolve(transactions);
+			}
+		};
+
+	});
+
+}
+
 const updateItem = (item) => addItem(item);
 
 export {
@@ -98,5 +131,6 @@ export {
     addItem,
     getItems,
     deleteItem,
-    updateItem
+    updateItem,
+    getData
 }

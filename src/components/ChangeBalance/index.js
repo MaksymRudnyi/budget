@@ -19,6 +19,7 @@ outline: none;
   align-items: center;
   justify-content: center;
     opacity: 1;
+    z-index: 2;
 
     &:hover {
         cursor: pointer;

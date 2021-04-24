@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 
 import { STATUSES } from './constants';
-import { getItems, addItem, deleteItem, updateItem } from './utils/indexdb'
+import { getData, addItem, deleteItem, updateItem } from './utils/indexdb'
 
 export const useBooleanToggle = (initialStatus = false) => {
     const [status, setStatus] = useState(initialStatus);
@@ -22,7 +22,8 @@ export const useData = () => {
     const [state, setState] = useState({
         transactions: [],
         error: '',
-        status: STATUSES.IDLE
+        status: STATUSES.IDLE,
+        hasNextPage: true
     });
 
     useEffect(() => {
@@ -31,21 +32,43 @@ export const useData = () => {
             status: STATUSES.PENDING
         });
 
-        getItems().then((transactions) => {
+        getData(0, 20).then((transactions) => {
             setState({
                 ...state,
                 transactions,
-                status: STATUSES.SUCCESS
+                status: STATUSES.SUCCESS,
+                hasNextPage: true
             })
         }).catch((e) => {
             setState({
                 ...state,
                 transactions: [],
                 status: STATUSES.ERROR,
-                error: e
+                error: e,
+                hasNextPage: false
             })
         })
     }, [])
+
+    const loadMoreRows = useCallback(() => {
+        setState({
+            ...state,
+            status: STATUSES.PENDING
+        });
+
+        getData(state.transactions.length, 20).then((transactions) => {
+            setState({
+                ...state,
+                transactions: [...state.transactions, ...transactions],
+                status: STATUSES.SUCCESS
+            })
+        }).catch(() => {
+            setState({
+                ...state,
+                hasNextPage: false
+            })
+        })
+    }, [state])
 
     const pushTransaction = useCallback((data) => {
         const transaction = {
@@ -94,6 +117,7 @@ export const useData = () => {
         ...state,
         pushTransaction,
         onDelete,
-        onStarClick
+        onStarClick,
+        loadMoreRows
     }
 }
