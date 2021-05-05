@@ -9,21 +9,25 @@ import {ChangeBalance} from '../ChangeBalance';
 import { Wrapper } from './styles'
 import { STATUSES } from '../../constants';
 import { useData } from '../../hooks';
+import { BalanceData} from '../BalanceData';
 
 const Home = () => {
-    const [balance, setBalance] = useState(0);
+    // const [balance, setBalance] = useState(0);
 
     const { transactions, hasNextPage, status, pushTransaction, onDelete, onStarClick, loadMoreRows } = useData();
 
     const onChange = (transaction) => {
         pushTransaction(transaction);
-        setBalance(balance + Number(transaction.value))
+        // setBalance(balance + Number(transaction.value))
     }
 
     return (
         <ErrorBoundary>
             <Wrapper>
-                <Balance balance={balance}/>
+                <BalanceData>
+                    {(balance) => <Balance balance={balance}/>}
+                </BalanceData>
+            
                 <ChangeBalance onChange={onChange}/>
                 <hr/>
 

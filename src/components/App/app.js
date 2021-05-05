@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Suspense, lazy} from 'react';
 import {
     BrowserRouter as Router,
     Switch,
@@ -9,10 +9,12 @@ import { open } from '../../utils/indexdb';
 import Home from '../Home';
 import About from '../About';
 import Settings from '../Settings';
-import Statistics from '../Statistics';
+// import Statistics from '../Statistics';
 import Header from '../Header';
 
-import { Wrapper, GlobalStyle } from './styles'
+import { Wrapper, GlobalStyle } from './styles';
+
+const Statistics = lazy(() => import('../Statistics'));
 
 class App extends React.Component {
     constructor(props) {
@@ -45,22 +47,24 @@ class App extends React.Component {
                         
                             <Header/>
         
-                            <Switch>
-                                <Route path="/about">
-                                    <About />
-                                </Route>
-                                <Route path="/statistics">
-                                    <Statistics />
-                                </Route>
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <Switch>
+                                    <Route path="/about">
+                                        <About />
+                                    </Route>
+                                    <Route path="/statistics">
+                                        <Statistics />
+                                    </Route>
 
-                                <Route path="/settings">
-                                    <Settings />
-                                </Route>
+                                    <Route path="/settings">
+                                        <Settings />
+                                    </Route>
 
-                                <Route path="/">
-                                    <Home />
-                                </Route>
+                                    <Route path="/">
+                                        <Home />
+                                    </Route>
                                 </Switch>
+                            </Suspense>
                     </Wrapper>
                 </Router>
         )
