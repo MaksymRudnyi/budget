@@ -1,8 +1,10 @@
 import { useContext, useMemo, useState, memo } from 'react';
 
 import { AppContext } from '../../providers/context';
+import { LOCALES } from '../../providers/i18n';
 import { useBooleanToggle} from '../../hooks';
-
+import { saveToStorage } from '../../utils/sessionStorage'
+import {addData } from '../../utils/generate'
 
 const Test = memo(({data}) => {
     console.log('rendering');
@@ -24,6 +26,17 @@ const Setting = () => {
         })
     }
 
+    const onChangeLocale = (e) => {
+        const {value} = e.target;
+
+        dispatch({
+            type: 'setLocale',
+            locale: value
+        });
+
+        saveToStorage('locale', value)
+    }
+
     const data = useMemo(() => [2], []);
 
     return (
@@ -32,19 +45,36 @@ const Setting = () => {
 
             <Test data={data}/>
 
+            <button onClick={addData}>Add data</button>
+
             <div>
                 <form>
-                    <label>
-                        Валюта: 
+                    <div>
+                        <label>
+                            Валюта: 
 
-                        <select name="currency" 
-                            onChange={onChange}
-                            value={state.currency}>
-                            <option value="UAH">Гривня</option>
-                            <option value="USD">Долар США</option>
-                            <option value="EUR">Євро</option>
-                        </select>
-                    </label>
+                            <select name="currency" 
+                                onChange={onChange}
+                                value={state.currency}>
+                                <option value="UAH">Гривня</option>
+                                <option value="USD">Долар США</option>
+                                <option value="EUR">Євро</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div>
+                        <label>
+                            Мова: 
+
+                            <select name="locale" 
+                                onChange={onChangeLocale}
+                                value={state.locale}>
+                                <option value={LOCALES.UKRAINIAN}>Українська</option>
+                                <option value={LOCALES.ENGLISH}>English</option>
+                            </select>
+                        </label>
+                    </div>
                 </form>
             </div>
 

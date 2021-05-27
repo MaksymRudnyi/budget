@@ -9,6 +9,10 @@ export const Nav = styled.nav`
 
         li {
             margin-right: 25px;
+
+            a {
+                color: ${({theme}) => theme.linkColor}
+            }
         }
     }
 
