@@ -39,35 +39,39 @@ function open() {
 };
 
 function addItem(item) {
-  const db = html5rocks.indexedDB.db;
-  const trans = db.transaction([DB_NAME], "readwrite");
-  const store = trans.objectStore(DB_NAME);
+  return new Promise((resolve, reject) => {
+    const db = html5rocks.indexedDB.db;
+    const trans = db.transaction([DB_NAME], "readwrite");
+    const store = trans.objectStore(DB_NAME);
 
-  const request = store.put(item);
+    const request = store.put(item);
 
-  request.onsuccess = function(e) {
-    console.log('success')
-  };
+    request.onsuccess = function(e) {
+      resolve()
+    };
 
-  request.onerror = function(e) {
-    console.log("Error Adding: ", e);
-  };
+    request.onerror = function(e) {
+      reject(e)
+    };
+  })
 };
 
 function deleteItem(id) {
-  const db = html5rocks.indexedDB.db;
-  const trans = db.transaction([DB_NAME], "readwrite");
-  const store = trans.objectStore(DB_NAME);
-
-  const request = store.delete(id);
-
-  request.onsuccess = function(e) {
-    console.log('success')
-  };
-
-  request.onerror = function(e) {
-    console.log("Error Adding: ", e);
-  };
+  return new Promise((resolve, reject) => {
+    const db = html5rocks.indexedDB.db;
+    const trans = db.transaction([DB_NAME], "readwrite");
+    const store = trans.objectStore(DB_NAME);
+  
+    const request = store.delete(id);
+  
+    request.onsuccess = function(e) {
+      resolve()
+    };
+  
+    request.onerror = function(e) {
+      reject(e);
+    };
+  })
 };
 
 function getItems() {
@@ -87,9 +91,12 @@ function getItems() {
     })
 };
 
+const updateItem = (item) => addItem(item);
+
 export {
     open,
     addItem,
     getItems,
-    deleteItem
+    deleteItem,
+    updateItem
 }
